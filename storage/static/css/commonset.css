@@ -1,0 +1,144 @@
+.rotateCW{
+    transform: rotate(90deg);
+    display: inline-block;
+}
+
+.rotateCCW{
+    transform: rotate(-90deg);
+    display: inline-block;
+}
+
+.underline {
+    text-decoration: underline;
+    text-underline-offset: 11px;
+    text-decoration-thickness: 2px;
+    height: 28px;
+}
+
+.ls15 {
+    letter-spacing: 0.15em;
+  }
+
+.note {
+    color: #FF2E6B;
+}
+
+.opacity {
+    opacity: 0;
+}
+
+.bold {
+    font-weight: 900;
+}
+
+.large {
+    font-size: large;
+}
+
+.xlarge {
+    font-size: x-large;
+}
+
+.xxlarge {
+    font-size: xx-large;
+}
+
+.center {
+    text-align: center;
+}
+
+.row, .column, .fleft, .fright, .fcenter{
+    display: flex;
+}
+
+.none {
+    display: none;
+}
+
+.abs {
+    position: absolute;
+}
+
+.rel {
+    position: relative;
+}
+
+.row {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.column {
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.fleft {
+    justify-content: left;
+}
+
+.fright {
+    justify-content: right;
+}
+
+.fcenter {
+    justify-content: center;
+}
+
+.hover, .hover_underline, .button_hover{
+    cursor: pointer;
+}
+
+.hover_underline {
+    color: black;
+    display: inline-block;
+    position: relative;
+}
+
+.hover_underline::after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 2px;
+    background-color: black;
+    transition: .5s; /* 動畫秒數 */
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    line-height: 1;
+}
+
+.hover_underline:hover::after {
+    width: 100%;
+    z-index: 99;
+}
+
+.button_hover{
+    color: black;
+    text-align: center;
+    border-color: black;
+    transition: all .3s; /* 動畫秒數 */
+}
+
+.button_hover:hover{
+    border-color: #FF8C00;
+    color: #FF8C00;
+    transition: all .3s; /* 動畫秒數 */
+}
+
+.en{
+    font-family: 'Roboto Flex', sans-serif;
+}
+
+.ch{
+    font-family: 'Noto Sans TC', sans-serif;    
+}
+
+.mt2 {
+    margin: 2vh 0;
+}
+
+table, tr, td {
+    border:1px solid black;
+}
+

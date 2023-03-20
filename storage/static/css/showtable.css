@@ -1,0 +1,11 @@
+.update_form {
+    position: fixed;
+    top: 50%; 
+    left: 35%; 
+    background-color: white;
+}
+
+.hover:hover {
+    background-color: aqua;
+    transition: .5s; /* 動畫秒數 */
+}
