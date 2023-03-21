@@ -19,5 +19,5 @@
 `$python craft serve --host {youripaddr}`
 
 ## 開始使用
-browser: http://youripaddr:8000
+browser: http://{youripaddr}:8000
 
