@@ -6,32 +6,40 @@
 {% endblock %}
 
 {% block content %}
-    <form method="POST" action="/ADD">
-        {{ csrf_field }}
-        <div class="row mt2" style="width: 60vw;">
-            <div class="flex column">
-                <label>借用人</label>
-                <select name="borrow">
-                    @for staff in staff_all
-                        <option value="{{staff.name}}"> {{staff.name}}</option>
-                    @endfor
-                </select>
+    <div class="row fcenter">
+        <form method="POST" action="/ADD">
+            {{ csrf_field }}
+            <div class="row mt2" style="width: 60vw;">
+                <div class="flex column">
+                    <label>借用人</label>
+                    <select name="borrow">
+                        @for staff in staff_all
+                            <option value="{{staff.name}}"> {{staff.name}}</option>
+                        @endfor
+                    </select>
+                </div>
+                <div class="flex column">
+                    <label>設備</label>
+                    <select name="device">
+                        @for device in devices
+                            <option value="{{device.name}}"> {{device.name}}</option>
+                        @endfor
+                    </select>
+                </div>
+                <div class="flex column">
+                    <label for="borrow_time">借出時間</label>
+                    <input type="datetime-local" name="borrow_time" value="{{nowtime}}"/>
+                </div>
+                <input type="submit" value="新增"/>
             </div>
-            <div class="flex column">
-                <label>設備</label>
-                <select name="device">
-                    @for device in devices
-                        <option value="{{device.name}}"> {{device.name}}</option>
-                    @endfor
-                </select>
-            </div>
-            <div class="flex column">
-                <label for="borrow_time">借出時間</label>
-                <input type="datetime-local" name="borrow_time" value="{{nowtime}}"/>
-            </div>
-            <input type="submit" value="新增"/>
-        </div>
-    </form>
+        </form>
+        @if auth()
+            <form method="GET" action="{{ route('logout') }}">
+                <label for="borrow_time">目前使用者：{{ user_inuse.name }}</label>
+                <input class="mt2 l2" type="submit" value="登出"/>
+            </form>
+        @endif
+    </div>
         <table style="width: 100%;">
             <tr>
                 @for l in ["編號", "借用人", "設備","借出時間", "確認者", "歸還時間"]
@@ -39,7 +47,7 @@
                 @endfor
             </tr>
             @for bt in Borrow_table               
-                @if not bt.cs.name or not bt.return_time    
+                @if not bt.user.name or not bt.return_time    
                     <tr class="hover">                    
                         <td class="note">{{bt.id}}</td>
                         <td class="note">{{bt.bs.name}}</td>
@@ -49,8 +57,8 @@
                             {{ csrf_field }}
                             <td>
                                 <select name="confirm" class="opacity">
-                                    @for staff in staff_all
-                                        <option value="{{staff.name}}"> {{staff.name}}</option>
+                                    @for user in user_all
+                                        <option value="{{user.id}}"> {{user.name}}</option>
                                     @endfor
                                 </select>
                             </td>                
@@ -58,6 +66,11 @@
                                 <input class="opacity" type="datetime-local" name="return_time" value="{{nowtime}}"/>
                                 <input class="none" type="text" name="btid" value="{{bt.id}}"/>
                                 <input class="opacity" type="submit" value="歸還"/>
+                                @if bag().any()
+                                    @for message in bag().messages()
+                                        <p> {{message}} </p>
+                                    @endfor
+                                @endif
                             </td>
                         </form>
                     </tr>
@@ -67,7 +80,7 @@
                         <td>{{bt.bs.name}}</td>
                         <td>{{bt.device.name}}</td>
                         <td>{{bt.borrow_time}}</td>
-                        <td>{{bt.cs.name or ""}}</td>                
+                        <td>{{bt.user.name or ""}}</td>                
                         <td>{{bt.return_time or ""}}</td>
                     </tr>
                 @endif
@@ -79,8 +92,8 @@
                         <td>
                             <label>確認者</label>
                             <select name="confirm">
-                                @for staff in staff_all
-                                    <option value="{{staff.name}}"> {{staff.name}}</option>
+                                @for user in user_all
+                                    <option value="{{user.id}}"> {{user.name}}</option>
                                 @endfor
                             </select>
                         </td>

@@ -7,7 +7,7 @@ class Borrow(Model):
 
     __fillable__ = [
                     "borrow_staff_number",
-                    "confirm_staff_number",
+                    "confirm_user_id",
                     "devices_number",
                     "borrow_time",
                     "return_time",
@@ -23,7 +23,9 @@ class Borrow(Model):
         from app.models.Staff import Staff
         return Staff
 
-    @belongs_to("confirm_staff_number", "staff_number")
-    def cs(self):
-        from app.models.Staff import Staff
-        return Staff
+    @belongs_to("confirm_user_id", "id")
+    def user(self):
+        from app.models.User import User
+        return User
+
+

@@ -11,6 +11,6 @@ HASHING = {
     "argon2": {"memory": 1024, "threads": 2, "time": 2},
 }
 
-APP_URL = env("APP_URL", "http://0.0.0.0:8000/")
+APP_URL = env("APP_URL", "http://127.0.0.1:8000/")
 
 MIX_BASE_URL = env("MIX_BASE_URL", None)
