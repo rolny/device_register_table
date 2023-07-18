@@ -34,9 +34,18 @@
             </div>
         </form>
         @if auth()
-            <form method="GET" action="{{ route('logout') }}">
-                <label for="borrow_time">目前使用者：{{ user_inuse.name }}</label>
-                <input class="mt2 l2" type="submit" value="登出"/>
+            <form method="GET" action="{{ route('logout') }}" style="">
+                <div>
+                    <label for="borrow_time">目前使用者：</label>
+                    <br/>
+                    <label for="borrow_time">{{ user_inuse.name }}</label>
+                    <input class="mt2 l2" type="submit" value="登出"/>
+                </div>
+            </form>
+            <form method="GET" action="{{ route('change_password', {'token': cookie('token')}) }}" style="position: absolute;right: 1vw;">
+                <div>
+                    <input class="mt2 l2" type="submit" value="變更密碼"/>
+                </div>
             </form>
         @endif
     </div>
