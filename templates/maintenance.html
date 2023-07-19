@@ -1,20 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}新增設備{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="/css/commonset.css">
+    <link rel="stylesheet" href="/css/showtable.css">
+{% endblock %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Server Maintenance</title>
-  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-</head>
+{% block content %}
+    
+{% endblock %}
 
-<body>
-  {% block content %}
-  <div class="h-screen flex flex-col items-center justify-center">
-    <p class="text-center">Sorry, this site is currently down for maintenance.</p>
-  </div>
-  {% endblock %}
-</body>
-
-</html>
+{% block js %}
+    <script src="/js/confirm.js"></script>
+{% endblock %}

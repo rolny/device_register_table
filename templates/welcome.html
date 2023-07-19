@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row fcenter">
-        <form method="POST" action="/ADD">
+    <div class="row">
+        <form method="POST" action="{{ route('add', {'item': item}) }}">
             {{ csrf_field }}
             <div class="row mt2" style="width: 60vw;">
                 <div class="flex column">
@@ -18,13 +18,15 @@
                         @endfor
                     </select>
                 </div>
-                <div class="flex column">
-                    <label>設備</label>
-                    <select name="device">
-                        @for device in devices
-                            <option value="{{device.name}}"> {{device.name}}</option>
-                        @endfor
-                    </select>
+                <div class="flex column">                    
+                    @if item
+                        <label > {{ item }} </label>
+                        <select name="device">
+                            @for device in query.table(item).get()
+                                <option value="{{device['name']}}"> {{device['name']}} </option>
+                            @endfor
+                        </select>
+                    @endif
                 </div>
                 <div class="flex column">
                     <label for="borrow_time">借出時間</label>
@@ -34,24 +36,24 @@
             </div>
         </form>
         @if auth()
-            <form method="GET" action="{{ route('logout') }}" style="">
+            <div class="row">
                 <div>
                     <label for="borrow_time">目前使用者：</label>
-                    <br/>
+                    <br>
                     <label for="borrow_time">{{ user_inuse.name }}</label>
-                    <input class="mt2 l2" type="submit" value="登出"/>
                 </div>
-            </form>
-            <form method="GET" action="{{ route('change_password', {'token': cookie('token')}) }}" style="position: absolute;right: 1vw;">
                 <div>
-                    <input class="mt2 l2" type="submit" value="變更密碼"/>
+                    <form method="GET" action="{{ route('logout') }}" style="">                        
+                        <input class="mt2 l2" type="submit" value="登出"/>
+                    </form>
                 </div>
-            </form>
+            </div>
         @endif
     </div>
+    @if item
         <table style="width: 100%;">
             <tr>
-                @for l in ["編號", "借用人", "設備","借出時間", "確認者", "歸還時間"]
+                @for l in ["編號", "借用人", item,"借出時間", "確認者", "歸還時間"]
                     <td>{{l}}</td>
                 @endfor
             </tr>
@@ -119,7 +121,7 @@
                 #}
             @endfor
         </table>
-    
+    @endif
 {% endblock %}
 
 {% block js %}

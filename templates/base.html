@@ -16,6 +16,13 @@
     {% endblock %}
   </head>
   <body>
+    <div >
+        <ul class="flex">
+            @for key, menu in {"設備": "devices", "書": "books"}.items()
+                <li style="margin-right: 10px;list-style: none;"><a href="{{ route('index', {'item': menu}) }}">{{ key }}</a></li>
+            @endfor
+        </ul>
+    </div>
     {% block content %}{% endblock %}
     {% block js %}
     <!-- <script src="/assets/js/app.js"></script> -->

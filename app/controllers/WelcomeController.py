@@ -15,25 +15,27 @@ import datetime
 
 class WelcomeController(Controller):
     """WelcomeController Controller Class."""
-
+    
     def show(self, view: View, request: Request, auth: Auth):
+        qry = QueryBuilder()
         staff_all = Staff.get()
         user_all = User.get()
-        devices = Device.get()
         Borrow_table = Borrow.get()
         nowtime = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M")
         user = auth.user()
         return view.render("welcome", {
             "staff_all": staff_all,
             "user_all": user_all,
-            "devices": devices,
+            "query": qry,
             "nowtime": nowtime,
             "Borrow_table": Borrow_table,
             "user_inuse": user,
+            "item": request.param("item"),
             })
 
     def add(self, request: Request, response: Response):
         d_n = request.input("device")
+        qry = QueryBuilder()
         devices = Device.get()
         devices.where("name", d_n).first()["devices_number"]
         b_s_name = request.input("borrow")
@@ -47,7 +49,7 @@ class WelcomeController(Controller):
                     "borrow_time": b_t,
                 }
             )
-        return response.redirect('/')
+        return response.redirect(f'/index/{request.param("item")}')
 
     def confirm_update(self, request: Request, response: Response, auth: Auth):
         c_user_id = request.input("confirm")
@@ -59,6 +61,6 @@ class WelcomeController(Controller):
         elif user:            
             if user.id != c_user_id:
                 Borrow.where("id", bt_id).update({"return_time": r_t, "confirm_user_id": c_user_id})
-                return response.redirect('/')
+                return response.redirect('/index')
             else:
                 return response.redirect(name="login").with_errors("錯誤的確認者")

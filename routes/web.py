@@ -2,8 +2,8 @@ from masonite.routes import Route
 from masonite.authentication import Auth
 
 ROUTES = [
-            Route.get("/", "WelcomeController@show"),
-            Route.post("/ADD", "WelcomeController@add"),
+            Route.get("/index/?item", "WelcomeController@show").name("index"),
+            Route.post("/add/?item", "WelcomeController@add").name("add"),
             Route.post("/C_U", "WelcomeController@confirm_update"),
 ]           
 

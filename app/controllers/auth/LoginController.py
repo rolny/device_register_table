@@ -13,7 +13,7 @@ class LoginController(Controller):
         login = auth.attempt(request.input("username"), request.input("password"))
 
         if login:
-            return response.redirect("/")
+            return response.redirect("/index")
             
         # Go back to login page
         return response.redirect(name="login").with_errors(
@@ -22,4 +22,4 @@ class LoginController(Controller):
 
     def logout(self, auth: Auth, response: Response):
         auth.logout()
-        return response.redirect("/")
+        return response.redirect("/index")
