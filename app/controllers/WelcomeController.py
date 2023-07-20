@@ -39,7 +39,7 @@ class WelcomeController(Controller):
         b_s_name = request.input("borrow")
         b_t = request.input("borrow_time")
         staff = Staff.get()
-        b_sn = staff.where("name", b_s_name).first()["staff_number"]
+        b_sn = staff.where("name", b_s_name).first()["number"]
         if item == "devices":
             Borrowdevice.create(
                     {
