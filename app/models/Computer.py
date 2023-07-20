@@ -1,8 +1,8 @@
-"""Device Model."""
+"""Computer Model."""
 from masoniteorm.models import Model
 
 
-class Device(Model):
-    """Device Model."""
+class Computer(Model):
+    """Computer Model."""
 
     __fillable__ = ["name", "number"]

@@ -1,14 +1,14 @@
-"""MigrationForStaffsTable Migration."""
+"""MigrationForComputersTable Migration."""
 
 from masoniteorm.migrations import Migration
 
 
-class MigrationForStaffsTable(Migration):
+class MigrationForComputersTable(Migration):
     def up(self):
         """
         Run the migrations.
         """
-        with self.schema.create("staffs") as table:
+        with self.schema.create("computers") as table:
             table.increments("id")
             table.string("name")
             table.string("number").unique()
@@ -18,4 +18,4 @@ class MigrationForStaffsTable(Migration):
         """
         Revert the migrations.
         """
-        self.schema.drop("staffs")
+        self.schema.drop("computers")

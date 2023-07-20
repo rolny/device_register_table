@@ -11,7 +11,7 @@ class BookTableSeeder(Seeder):
             Book.create(
                 {
                     "name": f"book{i}",
-                    "books_number": f"ICS_{i}"
+                    "number": f"ICS_{i}"
                 }
             )
 

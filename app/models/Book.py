@@ -5,4 +5,4 @@ from masoniteorm.models import Model
 class Book(Model):
     """Book Model."""
 
-    __fillable__ = ["name", "books_number"]
+    __fillable__ = ["name", "number"]

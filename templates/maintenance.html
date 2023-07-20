@@ -6,6 +6,67 @@
 {% endblock %}
 
 {% block content %}
+    {%set whitch = {"員工": "staffs","裝置": "devices", "測試電腦": "computers", "書籍": "books"} %}
+    <div>
+        <form method="POST" action="{{ route('mainten.add') }}" style="">
+            {{ csrf_field }}
+            <div class="flex">
+                <div class="r2">
+                    <div class="flex mb2">
+                        <label class="">名稱：</label>            
+                        <input class="" value="" type="text" name="dnam" required>
+                    </div>
+                    <div class="flex">
+                        <label class="">編號：</label>            
+                        <input class="" value="" type="text" name="dnum" required>
+                    </div>
+                    @if bag().any()
+                        @for message in bag().messages()
+                            <span class="note"> {{message}} </span>
+                        @endfor
+                    @endif
+                </div> 
+                <div class="flex column">
+                    <select name="whitch">
+                        @for key, wh in whitch.items()
+                            <option value="{{ wh }}"> {{key}}</option>
+                        @endfor
+                    </select>
+                    <input type="submit" value="新增"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="flex mt2">
+        @for key, item in {"員工": staff, "裝置": device, "測試電腦": computer, "書籍": book}.items()
+            <div class="r2">
+                <table>
+                    <tr>
+                        <td>{{key}}</td>
+                        <td>編號</td>
+                        <td>刪除</td>
+                    </tr>
+                    @for d in item
+                        <tr class="hover">            
+                            <td class="">{{d.name}}</td>
+                            <td class="">{{d.number}}</td>
+                            <form method="POST" action="{{ route('mainten.delete', {'item': whitch[key]}) }}">
+                                {{ csrf_field }}
+                                <td >
+                                    <input class="none" type="text" name="dnum" value="{{d.number}}"/>
+                                    <input class="opacity" type="submit" value="刪除"/>
+                                </td>
+                            </form>
+                        </tr>
+                    @endfor
+                </table>
+                <form method="POST" class="mt2" action="{{ route('mainten.output', {'item': whitch[key]}) }}">
+                    {{ csrf_field }}
+                    <input type="submit" value="匯出{{key}}excel"/>
+                </form>
+            </div>
+        @endfor
+    </div>
     
 {% endblock %}
 

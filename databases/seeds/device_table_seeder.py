@@ -11,7 +11,7 @@ class DeviceTableSeeder(Seeder):
             Device.create(
                 {
                     "name": f"eth{i}",
-                    "devices_number": f"eth{i}"
+                    "number": f"eth{i}"
                 }
             )
 

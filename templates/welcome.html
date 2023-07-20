@@ -6,35 +6,41 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <form method="POST" action="{{ route('add', {'item': item}) }}">
-            {{ csrf_field }}
-            <div class="row mt2" style="width: 60vw;">
-                <div class="flex column">
-                    <label>借用人</label>
-                    <select name="borrow">
-                        @for staff in staff_all
-                            <option value="{{staff.name}}"> {{staff.name}}</option>
-                        @endfor
-                    </select>
-                </div>
-                <div class="flex column">                    
-                    @if item
-                        <label > {{ item }} </label>
-                        <select name="device">
-                            @for device in query.table(item).get()
-                                <option value="{{device['name']}}"> {{device['name']}} </option>
+    <div class="row">        
+        <div class="flex row">
+            <form method="POST" action="{{ route('add', {'item': item}) }}">
+                {{ csrf_field }}
+                <div class="row mt2" style="width: 60vw;">                
+                    <div class="flex column">
+                        <label>借用人</label>
+                        <select name="borrow">
+                            @for staff in staff_all
+                                <option value="{{staff.name}}"> {{staff.name}}</option>
                             @endfor
                         </select>
-                    @endif
+                    </div>
+                    <div class="flex column">
+                        @if item
+                            <label > {{ item }} </label>
+                            <select name="device">
+                                @for device in query.table(item).get()
+                                    <option value="{{device['number']}}"> {{device['number']}} </option>
+                                @endfor
+                            </select>
+                        @endif
+                    </div>
+                    <div class="flex column">
+                        <label for="borrow_time">借出時間</label>
+                        <input type="datetime-local" name="borrow_time" value="{{nowtime}}"/>
+                    </div>
+                    <input type="submit" value="新增"/>
                 </div>
-                <div class="flex column">
-                    <label for="borrow_time">借出時間</label>
-                    <input type="datetime-local" name="borrow_time" value="{{nowtime}}"/>
-                </div>
-                <input type="submit" value="新增"/>
-            </div>
-        </form>
+            </form>
+            <form method="POST" action="{{ route('output', {'item': item}) }}" style="margin: auto 0; padding-left: 2vw;" >
+                {{ csrf_field }}
+                <input type="submit" value="匯出excel"/>
+            </form>
+        </div>
         @if auth()
             <div class="row">
                 <div>
@@ -43,35 +49,50 @@
                     <label for="borrow_time">{{ user_inuse.name }}</label>
                 </div>
                 <div>
-                    <form method="GET" action="{{ route('logout') }}" style="">                        
-                        <input class="mt2 l2" type="submit" value="登出"/>
+                    <form method="GET" action="{{ route('maintenance') }}" style="">                        
+                        <input class="" type="submit" value="增加設備"/>
                     </form>
+                    <form method="GET" action="{{ route('logout') }}" style="">                        
+                        <input class="" type="submit" value="登出"/>
+                    </form>                    
                 </div>
             </div>
+        @else
+            <form method="GET" action="{{ route('login') }}" style="">                        
+                <input class="mt2 l2" type="submit" value="登入"/>
+            </form>
         @endif
     </div>
     @if item
+        {% set items = {"devices": "設備", "books": "書籍", "computers": "測試電腦"} %}
+        {% set borrow = {"devices": devices, "books": books, "computers": computers} %}
         <table style="width: 100%;">
             <tr>
-                @for l in ["編號", "借用人", item,"借出時間", "確認者", "歸還時間"]
+                @for l in ["編號", "借用人", items[item], items[item]+"編號","借出時間", "確認者", "歸還時間"]
                     <td>{{l}}</td>
                 @endfor
             </tr>
-            @for bt in Borrow_table               
-                @if not bt.user.name or not bt.return_time    
+            @for bt in borrow[item].get()
+                @if not bt.user.name or not bt.return_time
                     <tr class="hover">                    
                         <td class="note">{{bt.id}}</td>
                         <td class="note">{{bt.bs.name}}</td>
-                        <td class="note">{{bt.device.name}}</td>
+                        @if item == "devices"
+                            <td class="note">{{bt.device.name}}</td>
+                            <td class="note">{{bt.device.number}}</td>
+                        @elif item == "books"
+                            <td class="note">{{bt.book.name}}</td>
+                            <td class="note">{{bt.book.number}}</td>
+                        @elif item == "computers"
+                            <td>{{bt.computer.name}}</td>
+                            <td>{{bt.computer.number}}</td>
+                        @endif
                         <td class="note">{{bt.borrow_time}}</td>
-                        <form method="POST" action="/C_U">
+                        <form method="POST" action="{{ route('C_U', {'item': item}) }}">
                             {{ csrf_field }}
                             <td>
-                                <select name="confirm" class="opacity">
-                                    @for user in user_all
-                                        <option value="{{user.id}}"> {{user.name}}</option>
-                                    @endfor
-                                </select>
+                                <input class="none" value="{{user_inuse.id}}" name="confirm">
+                                <label class="opacity">{{user_inuse.name}}</label>
                             </td>                
                             <td >
                                 <input class="opacity" type="datetime-local" name="return_time" value="{{nowtime}}"/>
@@ -89,36 +110,21 @@
                     <tr>
                         <td>{{bt.id}}</td>
                         <td>{{bt.bs.name}}</td>
-                        <td>{{bt.device.name}}</td>
+                        @if item == "devices"
+                            <td>{{bt.device.name}}</td>
+                            <td>{{bt.device.number}}</td>
+                        @elif item == "books"
+                            <td>{{bt.book.name}}</td>
+                            <td>{{bt.book.number}}</td>
+                        @elif item == "computers"
+                            <td>{{bt.computer.name}}</td>
+                            <td>{{bt.computer.number}}</td>
+                        @endif
                         <td>{{bt.borrow_time}}</td>
-                        <td>{{bt.user.name or ""}}</td>                
+                        <td>{{bt.user.name or ""}}</td>
                         <td>{{bt.return_time or ""}}</td>
                     </tr>
                 @endif
-                {#
-                <tr class="none update_form">
-                    <form method="POST" action="/C_U">
-                        {{ csrf_field }}
-                        <td style="background-color: white;"><label class="close">X</label></td>
-                        <td>
-                            <label>確認者</label>
-                            <select name="confirm">
-                                @for user in user_all
-                                    <option value="{{user.id}}"> {{user.name}}</option>
-                                @endfor
-                            </select>
-                        </td>
-                        <td>
-                            <label for="return_time">歸還時間</label>
-                            <input type="datetime-local" name="return_time" value="{{nowtime}}"/>
-                        </td>
-                        <td class="none"><input type="text" name="btid" value="{{bt.id}}"/></td>
-                        <td>
-                            <input type="submit" value="歸還"/>
-                        </td>
-                    </form>
-                </tr>
-                #}
             @endfor
         </table>
     @endif

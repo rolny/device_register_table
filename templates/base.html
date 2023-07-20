@@ -18,7 +18,7 @@
   <body>
     <div >
         <ul class="flex">
-            @for key, menu in {"設備": "devices", "書": "books"}.items()
+            @for key, menu in {"設備": "devices", "書": "books", "測試電腦": "computers"}.items()
                 <li style="margin-right: 10px;list-style: none;"><a href="{{ route('index', {'item': menu}) }}">{{ key }}</a></li>
             @endfor
         </ul>

@@ -11,7 +11,7 @@ class MigrationForBooksTable(Migration):
         with self.schema.create("books") as table:
             table.increments("id")
             table.string("name")
-            table.string("books_number").unique()
+            table.string("number").unique()
             table.timestamps()
 
     def down(self):

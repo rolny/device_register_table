@@ -11,7 +11,7 @@ class MigrationForDevicesTable(Migration):
         with self.schema.create("devices") as table:
             table.increments("id")
             table.string("name")
-            table.string("devices_number").unique()
+            table.string("number").unique()
             table.timestamps()
 
     def down(self):
